@@ -166,7 +166,7 @@ public class PlaceViewActivity extends ListActivity implements LocationListener 
 	public void addNewPlace(PlaceRecord place) {
 		Log.i(TAG, "Entered addNewPlace()");
 
-		// TODO - Attempt to add place to the adapter, considering the following cases
+		// DONE - Attempt to add place to the adapter, considering the following cases
 
 		// A PlaceBadge for this location already exists. In this case issue a Toast message
 		// with the text - "You already have this location badge." Use the PlaceRecord 
@@ -183,12 +183,22 @@ public class PlaceViewActivity extends ListActivity implements LocationListener 
 		
 		// Otherwise - add the PlaceBadge to the adapter
 		
-		Toast.makeText(getApplicationContext(), "Adding new place badge " + place.toString(), Toast.LENGTH_LONG).show();
-		
+
 		if (place.getPlace() != null) {
-			mAdapter.getList().add(place);
-		} else {
+
+            if (place.getCountryName() == null || place.getCountryName() == ""){
+
+                Toast.makeText(getApplicationContext(), getString(R.string.no_country_string), Toast.LENGTH_LONG).show();
+
+            } else {
+
+                mAdapter.add(place);
+                //Toast.makeText(getApplicationContext(), "Adding new place badge " + place.toString(), Toast.LENGTH_LONG).show();
+            }
+        } else {
+
 			Toast.makeText(getApplicationContext(), "PlaceBadge could not be acquired" , Toast.LENGTH_LONG).show();
+
 		}
 		
 		
@@ -207,14 +217,14 @@ public class PlaceViewActivity extends ListActivity implements LocationListener 
 		// 3) If the current location is newer than the last locations, keep the
 		// current location.
 		
-		if 	(mLastLocationReading == null || ageInMilliseconds(mLastLocationReading) < 0) {
+		if 	(mLastLocationReading == null || ageInMilliseconds(currentLocation) - ageInMilliseconds(mLastLocationReading) < 0) {
 			
 			mLastLocationReading = currentLocation;
 			footerView.setClickable(true);
 			footerView.setEnabled(true);
 			//Toast.makeText(getApplicationContext(), "New location measurement, enable add button: " + mLastLocationReading.toString(), Toast.LENGTH_LONG).show();
 		}
-		
+        //Toast.makeText(getApplicationContext(), "New location measurement: " + mLastLocationReading.toString(), Toast.LENGTH_LONG).show();
 
 	}
 	
